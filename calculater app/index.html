@@ -1,0 +1,115 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="Style.css"/>
+</head>
+<body>
+  <table border="1">
+    <tr>
+      <td colspan="4"><input type="text" id="inputbox" value="0"/></td>
+    </tr>
+    <tr>
+      <td class="number">7</td>
+      <td class="number">8</td>
+      <td class="number">9</td>
+      <td class="operator">x</td>
+    </tr>
+    <tr>
+      <td class="number">4</td>
+      <td class="number">5</td>
+      <td class="number">6</td>
+      <td class="operator">-</td>
+    </tr>
+    <tr>
+      <td class="number">1</td>
+      <td class="number">2</td>
+      <td class="number">3</td>
+      <td class="operator">+</td>
+    </tr>
+    <tr>
+      <td class="number">0</td>
+      <td class="clear">AC</td>
+      <td class="operator">/</td>
+      <td class="equals">=</td>
+    </tr>
+  </table>
+
+  <script>
+    let inputBox = document.getElementById('inputbox');
+    let currentValue = '0';
+    let operator = '';
+    let previousValue = '';
+
+    function updateInputBox() {
+      inputBox.value = currentValue;
+    }
+
+    function handleNumberClick(number) {
+      if (currentValue === '0' && number !== '.') {
+        currentValue = number.toString();
+      } else {
+        currentValue += number.toString();
+      }
+      updateInputBox();
+    }
+
+    function handleOperatorClick(op) {
+      previousValue = currentValue;
+      currentValue = '0';
+      operator = op;
+    }
+
+    function handleEqualsClick() {
+      let result;
+      switch (operator) {
+        case '+':
+          result = parseFloat(previousValue) + parseFloat(currentValue);
+          break;
+        case '-':
+          result = parseFloat(previousValue) - parseFloat(currentValue);
+          break;
+        case 'x':
+          result = parseFloat(previousValue) * parseFloat(currentValue);
+          break;
+        case '/':
+          if (currentValue !== '0') {
+            result = parseFloat(previousValue) / parseFloat(currentValue);
+          } else {
+            result = 'Error';
+          }
+          break;
+        default:
+          result = currentValue;
+      }
+      currentValue = result.toString();
+      updateInputBox();
+    }
+
+    function handleACClick() {
+      currentValue = '0';
+      operator = '';
+      previousValue = '';
+      updateInputBox();
+    }
+
+    document.querySelectorAll('.number').forEach((td) => {
+      td.addEventListener('click', () => {
+        handleNumberClick(td.textContent);
+      });
+    });
+
+    document.querySelectorAll('.operator').forEach((td) => {
+      td.addEventListener('click', () => {
+        handleOperatorClick(td.textContent);
+      });
+    });
+
+    document.querySelector('.equals').addEventListener('click', () => {
+      handleEqualsClick();
+    });
+
+    document.querySelector('.clear').addEventListener('click', () => {
+      handleACClick();
+    });
+  </script>
+</body>
+</html>
